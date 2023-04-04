@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+<style>
+    .tab{
+        border:1px solid #0094ff;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+
+    <div v-if="isUpd">
+        <form>
+            输入airplane<input type="text" v-model="info.airplane"><br>
+            输入arriveairport<input type="text" v-model="info.arriveairport"><br>
+            输入arrivetime<input type="text" v-model="info.arrivetime"><br>
+            输入company<input type="text" v-model="info.company"><br>
+            输入flightid<input type="text" v-model="info.flightid"><br>
+            输入leaveairport<input type="text" v-model="info.leaveairport"><br>
+            输入leavetime<input type="text" v-model="info.leavetime"><br>
+            <button type="button"@click="up">确定</button><button type="button"@click="back">返回</button>
+        </form>
+    </div>
+    <div v-else>
+        <h1>index</h1>
+        <div>{{msg}}</div>
+        <div>
+            <button type="button" @click="addd" v-if="ad">新增</button>
+        </div>
+        <div v-if="isList">
+            <form>
+                输入airplane<input type="text" v-model="info.airplane"><br>
+                输入arriveairport<input type="text" v-model="info.arriveairport"><br>
+                输入arrivetime<input type="text" v-model="info.arrivetime"><br>
+                输入company<input type="text" v-model="info.company"><br>
+                输入flightid<input type="text" v-model="info.flightid"><br>
+                输入leaveairport<input type="text" v-model="info.leaveairport"><br>
+                输入leavetime<input type="text" v-model="info.leavetime"><br>
+                <button type="button"@click="adds">确定</button><button type="button"@click="back">返回</button>
+            </form>
+        </div>
+
+        <div v-else>
+            <table class="tab">
+                <tr>
+                    <td  class="tab">airplane</td>
+                    <td  class="tab">arriveairport</td>
+                    <td  class="tab">arrivetime</td>
+                    <td  class="tab">company</td>
+                    <td  class="tab">flightid</td>
+                    <td  class="tab">leaveairport</td>
+                    <td  class="tab">leavetime</td>
+                    <td  class="tab">操作</td>
+                </tr>
+                <tr v-for="i in list">
+                    <th  class="tab">{{i.airplane}}</th>
+                    <th  class="tab">{{i.arriveairport}}</th>
+                    <th  class="tab">{{i.arrivetime}}</th>
+                    <th  class="tab">{{i.company}}</th>
+                    <th  class="tab">{{i.flightid}}</th>
+                    <th  class="tab">{{i.leaveairport}}</th>
+                    <th  class="tab">{{i.leavetime}}</th>
+                    <th  class="tab"><button type="button" @click="updd(i)">修改</button><button type="button" @click="del(i.flightid)">删除</button></th>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+
+</div>
+</body>
+
+<script src="./js/vue2.2.js"></script>
+<script src="./js/axios.js"></script>
+<script src="./js/qs.js"></script>
+<script>
+    new Vue({
+        el:'#app',
+        data:{
+            isList:false,
+            msg:'我你爹',
+            list:[],
+            info: {
+                airplane:"",
+                arriveairport:"",
+                arrivetime:"",
+                company:"",
+                flightid:"",
+                leaveairport:"",
+                leavetime:""
+            },
+            ad:true,
+            isUpd:false
+
+        },
+        mounted:function (){
+            this.getList()
+        },
+        methods:{
+
+            getList(){
+                axios.get("/getAll").then(res=>{
+                    console.log(res)
+                    this.list = res.data;
+                })
+            },
+            addd(){
+
+              this.isList=true;
+                this.ad=false;
+            },
+            adds(){
+              axios.post("/add",this.info).then((res)=>{
+                this.list=false
+
+              }).finally(()=>{
+                  this.getList();
+                  this.isList=false
+                  this.ad=true;
+              })
+            },
+            back() {
+                this.isList=false
+                this.ad=true;
+            },
+            del(flightid){
+                axios.delete("/del?flightid="+flightid).then(res=>{
+                    this.getList()
+                })
+            },
+            updd(i){
+                this.isUpd=true;
+                this.isList=false;
+                this.info=i;
+            },
+            up(){
+                axios.put("/update",this.info).then((res)=>{
+
+                }).finally(()=>{
+                    this.isUpd=false;
+                    this.isList=false;
+                })
+            }
+
+
+
+
+
+        }
+    })
+</script>
+</html>

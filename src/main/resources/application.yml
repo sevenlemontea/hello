@@ -1,0 +1,27 @@
+
+
+#spring:
+#  profiles:
+#    active: dev
+server:
+  port: 8080
+
+spring:
+  thymeleaf:
+    cache: true #缓存
+    encoding: UTF-8 #字符集编码
+    mode: HTML5 #莫办个事
+    prefix: classpath:/templates/  #配置文件夹
+    suffix: .html #后缀
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: asd1230.
+    url: jdbc:mysql://127.0.0.1:13306/chxy?userSSL=felse
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.seven
+  mapper-locations: classpath:mapper/*.xml

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seven.hello.mapper.FlightMapper">
+<!--Flight getAll();-->
+    <select id="getAll" resultType="Flight">
+        select * from flight
+    </select>
+<!--    int add(Flight info);-->
+    <insert id="add">
+        insert into flight (flightid,company,leaveairport,arriveairport,leavetime,arrivetime,airplane) values (#{flightid},#{company},#{leaveairport},#{arriveairport},#{leavetime},#{arrivetime},#{airplane})
+    </insert>
+<!--     int del(String flightid);-->
+    <delete id="del">
+        delete from flight where flightid=#{flightid}
+    </delete>
+<!--     int upd(Flight flight);-->
+    <update id="upd">
+        update flight set company=#{company},leaveairport=#{leaveairport},arriveairport=#{arriveairport},leavetime=#{leavetime},arrivetime=#{arrivetime},airplane=#{airplane} where flightid=#{flightid}
+    </update>
+</mapper>
